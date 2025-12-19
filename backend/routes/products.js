@@ -36,11 +36,41 @@ router.get("/:id", async (req, res) => {
 });
 
 /* ================= CREATE PRODUCT (ADMIN) ================= */
+// router.post("/", verifyToken, requireAdmin, async (req, res) => {
+//   try {
+//     const { item_name, available_qty, price_paise } = req.body;
+
+//     if (!item_name || available_qty < 0 || price_paise <= 0) {
+//       return res.status(400).json({
+//         error: "Invalid item_name, available_qty, or price_paise",
+//       });
+//     }
+
+//     const result = await pool.query(
+//       `
+//       INSERT INTO products (item_name, available_qty, price_paise)
+//       VALUES ($1, $2, $3)
+//       RETURNING *
+//       `,
+//       [item_name, available_qty, price_paise]
+//     );
+
+//     res.status(201).json({
+//       message: "Product created successfully",
+//       product: result.rows[0],
+//     });
+//   } catch {
+//     res.status(500).json({ error: "Failed to create product" });
+//   }
+// });
+
+
 router.post("/", verifyToken, requireAdmin, async (req, res) => {
   try {
     const { item_name, available_qty, price_paise } = req.body;
 
-    if (!item_name || available_qty < 0 || price_paise <= 0) {
+    
+    if (!item_name || available_qty <= 0 || price_paise <= 0) {
       return res.status(400).json({
         error: "Invalid item_name, available_qty, or price_paise",
       });
@@ -50,19 +80,32 @@ router.post("/", verifyToken, requireAdmin, async (req, res) => {
       `
       INSERT INTO products (item_name, available_qty, price_paise)
       VALUES ($1, $2, $3)
+
+      ON CONFLICT (item_name)
+      DO UPDATE
+      SET
+        available_qty = products.available_qty + EXCLUDED.available_qty,
+        price_paise = EXCLUDED.price_paise,
+        updated_at = NOW()
+
       RETURNING *
       `,
       [item_name, available_qty, price_paise]
     );
 
-    res.status(201).json({
-      message: "Product created successfully",
+    return res.status(201).json({
+      message: "Product added / stock updated successfully",
       product: result.rows[0],
     });
-  } catch {
-    res.status(500).json({ error: "Failed to create product" });
+
+  } catch (err) {
+    console.error("UPSERT PRODUCT ERROR:", err);
+    return res.status(500).json({
+      error: "Failed to add or update product",
+    });
   }
 });
+
 
 /* ================= UPDATE PRODUCT (ADMIN) ================= */
 router.put("/:id", verifyToken, requireAdmin, async (req, res) => {

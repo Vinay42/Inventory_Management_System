@@ -135,9 +135,6 @@ If **any item** in the cart exceeds available stock, the **entire transaction is
 ---
 
 ## 📬 API Testing
-Use **Postman** or **curl** to test endpoints after starting the server.
+Use **Thunder Client** to test endpoints after starting the server.
 
----
 
-## 📄 License
-This project is for educational purposes.

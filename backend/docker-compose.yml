@@ -25,3 +25,27 @@ services:
 
 volumes:
   pg_data:
+
+
+
+# services:
+#   postgres:
+#     image: postgres:15
+#     container_name: ecommerce-postgres
+#     environment:
+#       POSTGRES_DB: ecommerce_db
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+#       - pg_data:/var/lib/postgresql/data
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U postgres"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+
+# volumes:
+#   pg_data:

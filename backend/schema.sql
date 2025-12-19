@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS products (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
+ALTER TABLE products
+ADD CONSTRAINT unique_item_name UNIQUE (item_name);
 -- =====================
 -- USER CARTS TABLE
 -- =====================
