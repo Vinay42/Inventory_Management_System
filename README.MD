@@ -136,5 +136,8 @@ If **any item** in the cart exceeds available stock, the **entire transaction is
 
 ## 📬 API Testing
 Use **Thunder Client** to test endpoints after starting the server.
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 735d8a30ced6ba699059f72aba575c34daf281b3
